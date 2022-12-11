@@ -1,27 +1,31 @@
+import * as ui from './../../shared/ui.actions';
 import { Router } from '@angular/router';
 import { AuthService } from './../../services/auth.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Usuario } from './../../shared/models/usuario.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { loguear } from '../auth.actions';
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
-export interface AppState  {
-  usuario:Usuario
-}
+import { AppState } from '../../app.reducer';
+import { Subscription } from 'rxjs';
+// export interface AppState  {
+//   usuario:Usuario
+// }
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styles: []
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit ,OnDestroy {
 
   usuario:Usuario = {
     nombre:"Javier"
   }
+  cargando:boolean = false;
   logForm :FormGroup;
+  UISubs$:Subscription;
   constructor(private store:Store<AppState>,
               private fb: FormBuilder,
               private authService: AuthService,
@@ -29,34 +33,39 @@ export class LoginComponent implements OnInit {
     this.logForm = fb.group({
       correo: ['', Validators.required],
       password: ['', Validators.required]
+    });
+    this.UISubs$ = this.store.select('ui').subscribe(ui=> {
+      console.log("el ui subs",ui);
+      this.cargando = ui.isLoading;
     })
    }
 
   ngOnInit() {
   }
-
+  ngOnDestroy(): void {
+      this.UISubs$.unsubscribe();
+  }
   loguearse(){
     console.log(this.logForm.valid)
     if(this.logForm.invalid) return;
-    Swal.fire({
-      title: 'Cargando',
-      didOpen: () => {
-        // setTimeout(() => {
-
-          Swal.showLoading(null)
-        // }, 2000);
-  }})
+    this.store.dispatch(ui.isLoading());
+    // Swal.fire({
+    //   title: 'Cargando',
+    //   didOpen: () => {
+    //       Swal.showLoading(null)
+    //  }})
   setTimeout(() => {
 
     this.authService.loguearUsuario(this.logForm.value)
-      .then(r=> {
-        console.log("logueo existoso",r);
+      .then(({user})=> {
+        console.log("logueo existoso",user);
+
+        this.store.dispatch(ui.stopLoading())
         this.router.navigate(['/']);
-        Swal.close();
-        // Swal.hideLoading();
+        // Swal.close();
     })
       .catch(e=>{ console.warn("error al loguearse",e.code);
-
+      this.store.dispatch(ui.stopLoading())
       Swal.fire({
         icon: 'error',
         title: 'Oops...',

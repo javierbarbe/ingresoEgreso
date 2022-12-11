@@ -11,8 +11,8 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 //NGRX
+import { appReducers } from './app.reducer';
 import { StoreModule } from '@ngrx/store';
-import { authReducer } from './auth/auth.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from './app.component';
@@ -25,6 +25,7 @@ import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
+// import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 
 @NgModule({
@@ -44,10 +45,11 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    // provideFirebaseApp(()=>initializeApp(environment.firebase)),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    StoreModule.forRoot({usuario:authReducer}),
+    StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       autoPause: true,
