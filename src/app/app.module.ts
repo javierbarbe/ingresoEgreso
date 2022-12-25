@@ -18,13 +18,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { IngresoEgresoComponent } from './ingreso-egreso/ingreso-egreso.component';
-import { EstadisticaComponent } from './ingreso-egreso/estadistica/estadistica.component';
-import { DetalleComponent } from './ingreso-egreso/detalle/detalle.component';
-import { FooterComponent } from './shared/footer/footer.component';
-import { NavbarComponent } from './shared/navbar/navbar.component';
-import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { SharedModule } from './shared/shared.module';
+import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
 // import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 
@@ -33,18 +28,18 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
     AppComponent,
     LoginComponent,
     RegisterComponent,
-    DashboardComponent,
-    IngresoEgresoComponent,
-    EstadisticaComponent,
-    DetalleComponent,
-    FooterComponent,
-    NavbarComponent,
-    SidebarComponent
+    // IngresoEgresoComponent,
+    // DashboardComponent,
+    // EstadisticaComponent,
+    // DetalleComponent,
+
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    SharedModule,
+    IngresoEgresoModule,
     // provideFirebaseApp(()=>initializeApp(environment.firebase)),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
