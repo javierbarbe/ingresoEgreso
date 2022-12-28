@@ -20,14 +20,15 @@ import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { SharedModule } from './shared/shared.module';
 import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
+import { AuthModule } from './auth/auth.module';
 // import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegisterComponent,
+    // LoginComponent,
+    // RegisterComponent,
     // IngresoEgresoComponent,
     // DashboardComponent,
     // EstadisticaComponent,
@@ -39,6 +40,7 @@ import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
     ReactiveFormsModule,
     AppRoutingModule,
     SharedModule,
+    AuthModule,
     IngresoEgresoModule,
     // provideFirebaseApp(()=>initializeApp(environment.firebase)),
     AngularFireModule.initializeApp(environment.firebase),

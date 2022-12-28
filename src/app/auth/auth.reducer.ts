@@ -1,6 +1,6 @@
 import { Usuario } from './../shared/models/usuario.model';
 import { createReducer, on } from '@ngrx/store';
-import { setUser, unsetUser } from './auth.actions';
+import { getUser, setUser, unsetUser } from './auth.actions';
 
 
 export interface State {
@@ -18,4 +18,6 @@ export const authReducer = createReducer(
   usuarioLogueadoStateInicial,
   on(setUser,    (state, { user }) => { return { ...state, user: {...user} } }),
   on(unsetUser,  (state)           => { return { ...state, user: null } }),
+  on(getUser,    (state)           => { return { ...state } }),
+
 );

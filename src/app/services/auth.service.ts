@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { environment } from "./../../environments/environment.prod";
 import * as auth from "../auth/auth.actions";
 import { Store } from "@ngrx/store";
@@ -68,7 +69,7 @@ export class AuthService {
                 .collection<Usuario>("usuarios", (ref) => ref.where("idUsuario", "==", firebaseUser.uid))
                 .valueChanges()
                 .pipe(
-                  // take(1),
+                  take(1),
                   map((userResp:Usuario[]) => {
                     const user = userResp[0] as Usuario;
                     console.log("el usuario desde firebase", user);
@@ -110,13 +111,15 @@ export class AuthService {
     console.log("el user", usuario);
     return this.auth
       .createUserWithEmailAndPassword(usuario.correo, usuario.password)
-      .then(({ user }) => {
+      .then( async ({ user }) => {
         const usuarioNuevo: Usuario = {
           correo: user.email,
           idUsuario: user.uid,
           nombre: usuario.nombre,
         };
 
+        // return await this.firestore.doc(`${user.uid}/usuario`).set(usuarioNuevo)
+      //#region manera antigua??
         this.firestore
           .collection("usuarios")
           .add(usuarioNuevo)
@@ -125,6 +128,7 @@ export class AuthService {
           })
           .catch((err) => console.warn("errores al grabar user", err));
         return usuarioNuevo as Usuario;
+        //#endregion
       });
   }
 

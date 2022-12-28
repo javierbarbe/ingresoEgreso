@@ -1,5 +1,4 @@
 import { SharedModule } from './../shared/shared.module';
-import { IngresoEgreso } from '../shared/models/ingreso-egreso';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';

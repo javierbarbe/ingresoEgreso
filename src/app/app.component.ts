@@ -10,6 +10,7 @@ export class AppComponent {
   title = 'app';
 constructor(private authService:AuthService){
   this.authService.initAuthListener();
+  this.authService.listadoUsuariosRegistrados();
 }
 
 }
