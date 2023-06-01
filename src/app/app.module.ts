@@ -21,12 +21,14 @@ import { RegisterComponent } from './auth/register/register.component';
 import { SharedModule } from './shared/shared.module';
 import { IngresoEgresoModule } from './ingreso-egreso/ingreso-egreso.module';
 import { AuthModule } from './auth/auth.module';
+import { PruebaFCCComponent } from './prueba-fcc/prueba-fcc.component';
 // import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    PruebaFCCComponent,
     // LoginComponent,
     // RegisterComponent,
     // IngresoEgresoComponent,

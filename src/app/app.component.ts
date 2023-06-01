@@ -11,6 +11,7 @@ export class AppComponent {
 constructor(private authService:AuthService){
   this.authService.initAuthListener();
   this.authService.listadoUsuariosRegistrados();
+
 }
 
 }

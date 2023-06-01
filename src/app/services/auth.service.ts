@@ -1,6 +1,8 @@
 import { async } from '@angular/core/testing';
 import { environment } from "./../../environments/environment.prod";
 import * as auth from "../auth/auth.actions";
+import * as ui from "../shared/ui.actions";
+import * as ingresoEgreso from "../ingreso-egreso/ingreso-egreso.actions";
 import { Store } from "@ngrx/store";
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { Injectable } from "@angular/core";
@@ -18,6 +20,7 @@ import { initializeApp } from "@angular/fire/app";
 export class AuthService {
 
   userSuscription : Subscription;
+  private _user : Usuario;
 
   constructor(
     private auth: AngularFireAuth,
@@ -26,6 +29,18 @@ export class AuthService {
   ) {}
   //  app = initializeApp(environment.firebase);
   //  db = getFirestore(this.app);
+
+//#region GETTERS Y SETTERS
+
+public get usuario() : Usuario {
+  return {...this._user};
+}
+setUsuario(usuario:Usuario){
+  this._user = usuario;
+}
+
+
+//#endregion
 
   initAuthListener() {
     this.auth.authState.subscribe((firebaseUser) => {
@@ -72,8 +87,13 @@ export class AuthService {
                   take(1),
                   map((userResp:Usuario[]) => {
                     const user = userResp[0] as Usuario;
+                    this._user = user;
                     console.log("el usuario desde firebase", user);
                     this.store.dispatch( auth.setUser({ user }) );
+                    // TODO  let items ={ ...user.ingresos, ...user.egresos};
+                    if(user.ingresos == null ) user.ingresos = [];
+                    if(user.egresos == null ) user.egresos = [];
+                    this.store.dispatch( ingresoEgreso.setItems( {items:[...user.ingresos, ...user.egresos]}));
                         // al coincidir las propiedades de firebase con las del objeto state no es necesaria conversión
                         //user : {
                         //   correo: firebaseUser.email,
@@ -88,6 +108,7 @@ export class AuthService {
           });
       } else {
         console.log("no hay usuario");
+        this._user = null;
         // desloguea del store
         this.userSuscription.unsubscribe(); // controla la emision de observables cuando me deslogueo o no hay usuario
         this.store.dispatch(auth.unsetUser());
@@ -140,6 +161,7 @@ export class AuthService {
   }
 
   logout() {
+    this._user = null;
     return this.auth.signOut();
   }
 
